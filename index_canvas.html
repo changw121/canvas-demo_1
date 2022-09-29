@@ -8,101 +8,70 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- 3 canvas标签自带宽高，如果在css中强制给canvas标签添加宽高会拉伸变糊，所以需要在canvas标签中就能设置好宽高（用户电脑的宽高通过js获取） -->
     <canvas id="canvas2" width="100" height="100"></canvas>
     <script>
        
-        //1 画线(抄https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial/Basic_usage#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E4%BE%8B%E5%AD%90)
         let canvas = document.getElementById("canvas2");
-        // 6 确定-获取屏幕宽高给canvas用
         canvas.width = document.documentElement.clientWidth
         canvas.height = document.documentElement.clientHeight
-
         let ctx = canvas.getContext("2d");
+        ctx.fillStyle = "black"; 
+        ctx.strokeStyle = "none";
+        ctx.lineWidth = 10;
+        //你可以试试没有这句，你画出来的是什么样子，你就知道加上它的深意了
+        ctx.lineCap = "round";
 
-        //8 画线的过程中设置红绿灯点击鼠标才画，默认亮红灯，鼠标放下的时候亮绿灯
         let painting = false  
-        // canvas.onmousedown = () => {
-        //     painting = true
-        // }
 
-        //2 不知道是啥，就修改然后比较效果呗
-        ctx.fillStyle = "black"; //填充
-        ctx.strokeStyle = "none" //描边为无
-        // ctx.fillRect (20, 20, 66, 60);
+        //记录上一次鼠标的位置
+        let last = []
 
-        //4 js获取屏幕宽高(搜-抄-试-确定)
-        //5 试 
-        // // console.log(document.body.clientWidth)
-        // // console.log(document.body.clientHeight)
-
-        // 7 获取鼠标位置-画点
-        // canvas.onclick = (e) => {
-        // canvas.onmousemove = (e) => {
-        //     //9 添加红绿灯
-        //     if(painting === true){
-        //         // console.log(e.clientX)
-        //         // console.log(e.clientY)
-        //         //画正方形
-        //         // ctx.fillRect (e.clientX - 5, e.clientY - 5, 10, 10);
-        //         //11 画圆形
-        //         ctx.beginPath();
-        //         ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI);
-        //         ctx.stroke();
-        //         ctx.fill();
-        //     } else {
-        //         console.log("闲着玩")
-        //     }            
-        // }
-
-        // //10 当鼠标松开的时候亮红灯
-        // canvas.onmouseup = () => {
-        //     painting = false
-        // } 
-    
         
-        //检测当前屏幕（手机/电脑）是否支持鼠标点击
+        
         var isTouchDevice = 'ontouchstart' in document.documentElement;
-        console.log(isTouchDevice)
+        // console.log(isTouchDevice)
 
         if(isTouchDevice){
-            //如果是触屏事件
-            canvas.ontouchmove = (e) => {
-                //触屏有可能多个手指
-                // console.log(e.touches[0])
+            //手机上没有初始的last，所以我们添加一个开始事件
+            canvas.ontouchstart = (e) => {
                 let x = e.touches[0].clientX
                 let y = e.touches[0].clientY
-                // console.log(x, y)
-                ctx.beginPath();
-                ctx.arc(x, y, 10, 0, 2 * Math.PI);
-                ctx.stroke();
-                ctx.fill();
+                last = [x, y]
+            }
+            canvas.ontouchmove = (e) => {
+                let x = e.touches[0].clientX
+                let y = e.touches[0].clientY
+                drawLine(last[0], last[1], x, y)
+                last = [x, y]
             }
         } else {
-            //如果是鼠标事件
-            canvas.onmousedown = () => {
+            canvas.onmousedown = (e) => {
                 painting = true
+                //当鼠标放下的时候，就将坐标记为上一次的点
+                last = [e.clientX, e.clientY]
             }
             canvas.onmousemove = (e) => {
-                //9 添加红绿灯
                 if(painting === true){
-                    // console.log(e.clientX)
-                    // console.log(e.clientY)
-                    //画正方形
-                    // ctx.fillRect (e.clientX - 5, e.clientY - 5, 10, 10);
-                    //11 画圆形
-                    ctx.beginPath();
-                    ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI);
-                    ctx.stroke();
-                    ctx.fill();
+                    //当鼠标移动到另外一个地方的时候，就将上一次的坐标即last传进来，连接到当前的鼠标位置
+                    drawLine(last[0], last[1], e.clientX, e.clientY)
+                    //上一次的坐标即last是需要实时更新的，当前的鼠标坐标在任务完成之后就会变成last
+                    last = [e.clientX, e.clientY]
                 }      
             }
-            //10 当鼠标松开的时候亮红灯
             canvas.onmouseup = () => {
                 painting = false
             } 
-
         }
+
+
+        //现在是鼠标边移动，我们边打点，这就会造成画的快就跟不上打点。所以我们在画线的过程中不应该打点而是起点和终点连成线
+        function drawLine(x1,y1,x2,y2){
+            ctx.beginPath();
+            ctx.moveTo(x1,y1);
+            ctx.lineTo(x2,y2);
+            ctx.stroke();
+        }
+        // drawLine(0, 0, 500, 500)
 
     </script>
 </body>
