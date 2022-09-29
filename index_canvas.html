@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画板</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 3 canvas标签自带宽高，如果在css中强制给canvas标签添加宽高会拉伸变糊，所以需要在canvas标签中就能设置好宽高（用户电脑的宽高通过js获取） -->
+    <canvas id="canvas2" width="100" height="100"></canvas>
+    <script>
+        
+        //1 画线(抄https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial/Basic_usage#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E4%BE%8B%E5%AD%90)
+        let canvas = document.getElementById("canvas2");
+        // 6 确定-获取屏幕宽高给canvas用
+        canvas.width = document.documentElement.clientWidth
+        canvas.height = document.documentElement.clientHeight
+
+        let ctx = canvas.getContext("2d");
+
+        //8 画线的过程中设置红绿灯点击鼠标才画，默认亮红灯，鼠标放下的时候亮绿灯
+        let painting = false  
+        canvas.onmousedown = () => {
+            painting = true
+        }
+
+        //2 不知道是啥，就修改然后比较效果呗
+        ctx.fillStyle = "black"; //填充
+        ctx.strokeStyle = "none" //描边为无
+        // ctx.fillRect (20, 20, 66, 60);
+
+        //4 js获取屏幕宽高(搜-抄-试-确定)
+        //5 试 
+        // console.log(document.body.clientWidth)
+        // console.log(document.body.clientHeight)
+
+        // 7 获取鼠标位置-画点
+        // canvas.onclick = (e) => {
+        canvas.onmousemove = (e) => {
+            //9 添加红绿灯
+            if(painting === true){
+                // console.log(e.clientX)
+                // console.log(e.clientY)
+                //画正方形
+                // ctx.fillRect (e.clientX - 5, e.clientY - 5, 10, 10);
+                //11 画圆形
+                ctx.beginPath();
+                ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI);
+                ctx.stroke();
+                ctx.fill();
+            } else {
+                console.log("闲着玩")
+            }            
+        }
+
+        //10 当鼠标松开的时候亮红灯
+        canvas.onmouseup = () => {
+            painting = false
+        }
+        
+        
+    </script>
+</body>
+</html>
