@@ -5,8 +5,45 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>画板</title>
+    <!-- <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    </style> -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    hi
+    <div id="canvas"></div>
+    监听用户鼠标点击
+    <script>
+        canvas.onclick = (e) => {
+            //1 获取用户鼠标点击处的坐标
+            // console.log(e)
+            console.log(e.clientX)
+            console.log(e.clientY)
+            //2 在鼠标点击处创建个div-实现用户点击后出现原点
+            let div = document.createElement('div')
+            //3 让div出现在xy坐标（用户鼠标点击处）
+            div.style.position = 'absolute'
+            div.style.left = e.clientX + 'px'
+            div.style.top = e.clientY + 'px'
+            //8 去掉红色边框
+            // div.style.border = '1px solid red'
+            div.style.width = '6px'
+            div.style.height = '6px'
+            //5 点击鼠标后出现的方框显示在鼠标箭头中间
+            div.style.marginLeft = '-3px'
+            div.style.marginTop = '-3px'
+            //6 将方框变成圆圈
+            div.style.borderRadius = '50%'
+            //7 变成实心圆
+            div.style.background = 'black'
+
+            //4 让div出现在canvas里面
+            canvas.appendChild(div)
+        }
+    </script>
 </body>
 </html>

@@ -1,0 +1,18 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* CSS id选择器
+ * id 选择器使用 HTML 元素的 id 属性来选择特定元素。
+ * 元素的 id 在页面中是唯一的，因此 id 选择器用于选择一个唯一的元素！
+ * 注：id 名称不能以数字开头
+ * border:按照border-width/border-style/border-color的顺序设置的属性；
+ * border-style: solid定义的是实线
+ * height:100vh和屏幕一样高；width:不写和屏幕一样高
+*/
+#canvas {
+    height: 100vh;
+    border: 1px solid red; 
+}
