@@ -28,3 +28,8 @@
     /* 删除canvas页面上自带的滚动条  */
     display: block;
 }
+
+/* 移动端画线时 页面也跟着滑动的解决办法 */
+body {
+    overflow: hidden;
+}
